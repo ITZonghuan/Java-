@@ -41,5 +41,91 @@ ArrayList有制定新增和直接新增两种方式，在这之前会有一步�
 
 指定位置新增的时候，在校验之后的操作很简单，就是数组的copy。将index位置及其后面的所有元素全部后移一位，为index创建新的位置。当数据量大的时候，涉及到扩容和大量数据的移动，所以效率低，速度慢。
 
-⑤
-    
+⑤ArrayList(int initialCapacity)会不会初始化数组大小？
+答：不会初始化数组大小。
+而且将构造函数与initialCapacity结合使用，然后使用set()会抛出IndexOutOfBoundsException异常，尽管该数组已经创建，但是大小设置不正确。
+
+进行此工作的唯一方法就是在使用构造函数后，根据需要使用add()多次，会实现size++操作。
+
+⑥ArrayList插入删除一定慢么？他的删除怎么实现的？
+取决于删除的元素离数组末端有多远，ArrayList拿来作为堆栈来用还是挺合适的，push和pop操作完全不涉及数据移动操作。
+删除的原理和新增是一样的，虽然叫删除，其实是数据的copy覆盖，将要删除的元素后面的所有元素往前移动一位，要删除的元素被成功覆盖，实现删除。
+
+⑦ArrayList是线程安全的么？
+当然不是，线程安全的版本的数组容器是Vector。
+Vector的实现很简单，就是把所有的方法统统加上synchronized关键字就可以了。
+也可以不使用Vector，用collections.synchronizedList把一个普通ArrayList包装成一个线程安全版本的数组容器也可以，原理同Vector一样，就是给所有方法套上一层synchronized。
+
+⑧ArrayList用来做队列合适么？数组合适么？
+不合适。
+队列是FIFO，如果用ArrayList做队列，就需要在数组尾部追加数据，数组头部删除数据，反过来也可以。
+但无论如何，都会有一个操作涉及到数组的数据搬迁，比较耗费性能。
+
+数组非常合适做队列。
+用两个偏移量来标记数组的读位置和写位置，如果超过长度就折回到数组开头，前提是定长数组。
+
+⑨ArrayList的遍历和LinkedList遍历性能比较如何？
+ArrayList要比LinkedList快得多，ArrayList遍历最大的优势在于内存的连续性，CPU的内部缓存结构会缓存连续的内存片段，可以大幅降低读取内存的性能开销。
+
+⑩说一说ArrayList常用的方法
+boolean add(E e)
+将指定的元素添加到此列表的尾部。
+
+void add(int index, E element)
+将指定的元素插入此列表中的指定位置。
+
+boolean addAll(Collection c)
+按照指定 collection 的迭代器所返回的元素顺序，将该 collection 中的所有元素添加到此列表的尾部。
+
+boolean addAll(int index, Collection c)
+从指定的位置开始，将指定 collection 中的所有元素插入到此列表中。
+
+void clear()
+移除此列表中的所有元素。
+
+Object clone()
+返回此 ArrayList 实例的浅表副本。
+
+boolean contains(Object o)
+如果此列表中包含指定的元素，则返回 true。
+
+void ensureCapacity(int minCapacity)
+如有必要，增加此 ArrayList 实例的容量，以确保它至少能够容纳最小容量参数所指定的元素数。
+
+E get(int index)
+返回此列表中指定位置上的元素。
+
+int indexOf(Object o)
+返回此列表中首次出现的指定元素的索引，或如果此列表不包含元素，则返回 -1。
+
+boolean isEmpty()
+如果此列表中没有元素，则返回 true
+
+int lastIndexOf(Object o)
+返回此列表中最后一次出现的指定元素的索引，或如果此列表不包含索引，则返回 -1。
+
+E remove(int index)
+移除此列表中指定位置上的元素。
+
+boolean remove(Object o)
+移除此列表中首次出现的指定元素（如果存在）。
+
+protected void removeRange(int fromIndex, int toIndex)
+移除列表中索引在 fromIndex（包括）和 toIndex（不包括）之间的所有元素。
+
+E set(int index, E element)
+用指定的元素替代此列表中指定位置上的元素。
+
+int size()
+返回此列表中的元素数。
+
+Object[] toArray()
+按适当顺序（从第一个到最后一个元素）返回包含此列表中所有元素的数组。
+
+T[] toArray(T[] a)
+按适当顺序（从第一个到最后一个元素）返回包含此列表中所有元素的数组；返回数组的运行时类型是指定数组的运行时类型。
+
+void trimToSize()
+将此 ArrayList 实例的容量调整为列表的当前大小。
+
+end！
